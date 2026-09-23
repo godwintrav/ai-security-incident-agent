@@ -15,7 +15,6 @@ class Loader():
 
     def fetch_documents_langchain(self) -> list[Document]:
         folders = glob.glob(str(Path(KNOWLEDGE_BASE_PATH) / "*"))
-        print(str(Path(KNOWLEDGE_BASE_PATH) / "*"))
         documents: list[Document] = []
         for folder in folders:
             doc_type = os.path.basename(folder)
@@ -35,5 +34,3 @@ class Loader():
                     doc.metadata["incident_type"] = None if file_name_without_extension == 'indicators_of_compromise' else file_name_without_extension
                 documents.append(doc)
         return documents
-
-
