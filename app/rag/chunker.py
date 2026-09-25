@@ -1,12 +1,15 @@
+from typing import Any
+
+from chromadb import Metadata
 from pydantic import BaseModel
 from langchain_text_splitters import MarkdownTextSplitter
 from langchain_core.documents import Document
 
-from loader import Loader
+from app.rag.loader import Loader
 
 class Result(BaseModel):
     page_content: str
-    metadata: dict
+    metadata: Metadata
 
 class Chunker():
     """This class only responsibility is chunking documents to smaller chunks to be used by the embedding class"""
@@ -33,4 +36,11 @@ class Chunker():
         return chunks
 
 
+# def main():
+#     loader = Loader()
+#     documents = loader.fetch_documents_langchain()
+#     chunker = Chunker()
+#     results = chunker.create_chunks_with_markdown_splitter(documents)
 
+# if __name__ == "__main__":
+#     main()

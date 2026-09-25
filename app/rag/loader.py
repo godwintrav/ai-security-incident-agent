@@ -31,6 +31,6 @@ class Loader():
                 doc.metadata["document"] = file_name
                 doc.metadata["data_source"] = "project_knowledge"
                 if doc_type == 'security':
-                    doc.metadata["incident_type"] = None if file_name_without_extension == 'indicators_of_compromise' else file_name_without_extension
+                    doc.metadata["incident_type"] = "" if file_name_without_extension == 'indicators_of_compromise' else file_name_without_extension
                 documents.append(doc)
         return documents

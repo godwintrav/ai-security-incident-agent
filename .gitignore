@@ -33,6 +33,7 @@ models/checkpoints/
 
 # Chroma
 chroma_data/
+knowledge_base_vectorstore
 
 # OS
 .DS_Store
