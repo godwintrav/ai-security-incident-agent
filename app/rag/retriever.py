@@ -64,6 +64,7 @@ class Retriever():
 
         print("Rerank response:", response.choices[0].message.content)
         reply = response.choices[0].message.content
+        print(reply)
         order = RankOrder.model_validate_json(reply).order
 
         expected = set(valid_ids)
@@ -88,7 +89,7 @@ class Retriever():
 
         return [chunks[i - 1] for i in order]
 
-    def merge_chunks(chunks, chunks2) -> list[Result]:
+    def merge_chunks(self, chunks, chunks2) -> list[Result]:
         merged = chunks[:]
         existing = [chunk.page_content for chunk in chunks]
         for chunk in chunks2:
