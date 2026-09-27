@@ -65,4 +65,3 @@ class AnalyzeLog():
 
         return LogAnalysis.model_validate_json(content)
 
-

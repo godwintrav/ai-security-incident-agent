@@ -1,0 +1,30 @@
+{
+  "incident_type": "phishing",
+  "objective": "Determine whether a user or system was targeted or affected by a phishing attempt and identify evidence of interaction or compromise.",
+  "investigation_steps": [
+    "Identify the suspected phishing message, sender, recipient, and delivery time.",
+    "Review message headers and delivery metadata.",
+    "Identify URLs, domains, attachments, and other indicators contained in the message.",
+    "Determine whether the recipient opened the message or interacted with links or attachments.",
+    "Review authentication activity following suspected interaction.",
+    "Review endpoint or browser activity associated with the suspected phishing content.",
+    "Check identified domains, URLs, hashes, or files against available security intelligence.",
+    "Identify evidence gaps that prevent determining whether the phishing attempt resulted in compromise."
+  ],
+  "evidence_sources": [
+    "Email logs",
+    "Email headers",
+    "Secure email gateway logs",
+    "DNS logs",
+    "Proxy and web logs",
+    "Endpoint telemetry",
+    "Authentication logs"
+  ],
+  "completion_criteria": [
+    "Suspected phishing message identified.",
+    "Relevant indicators extracted.",
+    "User interaction with links or attachments investigated where evidence is available.",
+    "Post-interaction authentication and endpoint activity reviewed.",
+    "Remaining evidence gaps documented."
+  ]
+}

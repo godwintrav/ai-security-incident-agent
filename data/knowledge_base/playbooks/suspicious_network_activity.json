@@ -1,0 +1,31 @@
+{
+  "incident_type": "suspicious_network_activity",
+  "objective": "Determine what unusual or potentially relevant network activity occurred and identify the systems, destinations, protocols, and indicators involved.",
+  "investigation_steps": [
+    "Identify the source host or system.",
+    "Identify destination IP addresses, domains, and ports.",
+    "Review timestamps and connection frequency.",
+    "Identify the protocols and services involved.",
+    "Determine whether the connections were accepted, blocked, or otherwise observed.",
+    "Correlate network activity with authentication, process, or endpoint events where available.",
+    "Check relevant IP addresses, domains, or other indicators against available security intelligence.",
+    "Identify evidence gaps that prevent determining the purpose or impact of the network activity."
+  ],
+  "evidence_sources": [
+    "Firewall logs",
+    "Network flow logs",
+    "Proxy logs",
+    "DNS logs",
+    "Endpoint network telemetry",
+    "Authentication logs",
+    "Process execution logs"
+  ],
+  "completion_criteria": [
+    "Source system identified.",
+    "Relevant destinations and ports identified.",
+    "Connection timestamps and protocols reviewed.",
+    "Related endpoint or authentication activity correlated where available.",
+    "Relevant indicators identified.",
+    "Remaining evidence gaps documented."
+  ]
+}

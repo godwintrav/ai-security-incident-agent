@@ -22,4 +22,3 @@ class Ingestion():
         # store vector in chroma DB
         self.chroma.store_kb_vectors(chunks, vectors)
         print("Data ingestion complete")
-
