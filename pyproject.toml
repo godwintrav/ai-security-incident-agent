@@ -8,6 +8,8 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "accelerate>=1.15.0",
+    "bitsandbytes>=0.50.2",
     "chromadb>=1.5.9",
     "fastapi>=0.141.1",
     "gradio>=6.28.0",
@@ -18,10 +20,14 @@ dependencies = [
     "langchain-openai>=1.6.5",
     "langchain-text-splitters>=1.1.2",
     "litellm>=1.83.0",
+    "numpy>=2.5.3",
     "openai>=3.19.0",
     "pandas>=3.0.6",
+    "pydantic>=2.13.5",
     "requests>=2.34.2",
     "sentence-transformers>=6.1.0",
+    "torch>=2.14.0",
+    "transformers>=5.17.0",
     "uvicorn[standard]>=0.53.0",
 ]
 

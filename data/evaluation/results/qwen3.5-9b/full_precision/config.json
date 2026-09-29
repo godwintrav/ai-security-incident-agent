@@ -1,0 +1,11 @@
+{
+  "model": "Qwen/Qwen3.5-9B",
+  "dataset": "data/evaluation/regression_sets/regression.jsonl",
+  "examples": 104,
+  "device": "mps",
+  "dtype": "torch.bfloat16",
+  "max_new_tokens": 1024,
+  "do_sample": false,
+  "quantized": false,
+  "lora": false
+}
