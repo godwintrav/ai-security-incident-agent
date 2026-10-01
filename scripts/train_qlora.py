@@ -707,6 +707,9 @@ def main() -> None:
         validation_size=len(validation_dataset),
     )
 
+    if LOG_TO_WANDB:
+        wandb.init(project=PROJECT_NAME, name=RUN_NAME)
+
     # --------------------------------------------------------
     # Tokenizer
     # --------------------------------------------------------
