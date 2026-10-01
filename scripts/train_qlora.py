@@ -9,7 +9,6 @@ import torch
 from datasets import load_dataset
 from peft import (
     LoraConfig,
-    prepare_model_for_kbit_training,
 )
 from transformers import (
     AutoModelForCausalLM,
