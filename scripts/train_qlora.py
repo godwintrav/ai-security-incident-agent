@@ -19,8 +19,9 @@ from transformers import (
 )
 from trl import SFTConfig, SFTTrainer
 import os
-from google.colab import userdata
 import wandb
+from huggingface_hub import login
+from datetime import datetime
 
 
 # ============================================================
@@ -354,6 +355,9 @@ def build_lora_config(
 
 def build_training_config(
     args: argparse.Namespace,
+    run_name: str,
+    hub_model_name: str,
+    log_to_wandb: bool = False
 ) -> SFTConfig:
     return SFTConfig(
         output_dir=args.output_dir,
@@ -435,6 +439,8 @@ def build_training_config(
 
         save_total_limit=3,
 
+        hub_strategy="every_save",
+
         # --------------------------------------------
         # Logging
         # --------------------------------------------
@@ -445,7 +451,7 @@ def build_training_config(
 
         logging_first_step=True,
 
-        report_to="none",
+        report_to="wandb" if log_to_wandb else None,
 
         # --------------------------------------------
         # Dataset
@@ -460,6 +466,17 @@ def build_training_config(
         seed=args.seed,
 
         data_seed=args.seed,
+
+        # --------------------------------------------
+        # Push to Hub
+        # --------------------------------------------
+        run_name=run_name,
+
+        push_to_hub=True,
+
+        hub_model_id=hub_model_name,
+
+        hub_private_repo=True,
     )
 
 
@@ -634,9 +651,17 @@ def main() -> None:
     print("QLORA SECURITY INCIDENT FINE-TUNING")
     print("=" * 60)
 
-    wandb_api_key = userdata.get('WANDB_API_KEY')
+    #HF
+    HF_USER = "godwintrav"
+    hf_token = os.environ['HF_TOKEN']
+    login(hf_token, add_to_git_credential=True)
+
+    RUN_NAME =  f"{datetime.now():%Y-%m-%d_%H.%M.%S}"
+    PROJECT_RUN_NAME = f"{PROJECT_NAME}-{RUN_NAME}"
+    HUB_MODEL_NAME = f"{HF_USER}/{PROJECT_RUN_NAME}"
+
     PROJECT_NAME = "ai-security-incident-analyzer"
-    os.environ["WANDB_API_KEY"] = wandb_api_key
+    LOG_TO_WANDB = True
     wandb.login()
 
     # Configure Weights & Biases to record against our project
@@ -736,7 +761,7 @@ def main() -> None:
     # --------------------------------------------------------
 
     training_config = (
-        build_training_config(args)
+        build_training_config(args, run_name=RUN_NAME, hub_model_name=HUB_MODEL_NAME, log_to_wandb=LOG_TO_WANDB)
     )
 
     # --------------------------------------------------------
@@ -838,6 +863,10 @@ def main() -> None:
     )
 
     trainer.save_state()
+    trainer.model.push_to_hub(PROJECT_RUN_NAME, private=True)
+
+    if LOG_TO_WANDB:
+        wandb.finish()
 
     print()
     print("=" * 60)
