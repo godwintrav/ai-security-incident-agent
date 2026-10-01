@@ -294,14 +294,6 @@ def load_model(
     # KV caching is useful for inference but not training.
     model.config.use_cache = False
 
-    # Prepare the quantized model for QLoRA training.
-    model = prepare_model_for_kbit_training(
-        model,
-        use_gradient_checkpointing=True,
-    )
-
-    print_gpu_memory("3. AFTER K-BIT PREPARATION")
-
     return model
 
 
