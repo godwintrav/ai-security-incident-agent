@@ -657,10 +657,11 @@ def main() -> None:
     login(hf_token, add_to_git_credential=True)
 
     RUN_NAME =  f"{datetime.now():%Y-%m-%d_%H.%M.%S}"
+    PROJECT_NAME = "ai-security-incident-analyzer"
     PROJECT_RUN_NAME = f"{PROJECT_NAME}-{RUN_NAME}"
     HUB_MODEL_NAME = f"{HF_USER}/{PROJECT_RUN_NAME}"
 
-    PROJECT_NAME = "ai-security-incident-analyzer"
+    
     LOG_TO_WANDB = True
     wandb.login()
 
