@@ -55,7 +55,7 @@ DEFAULT_EPOCHS = 3
 DEFAULT_BATCH_SIZE = 2
 DEFAULT_GRADIENT_ACCUMULATION = 8
 
-DEFAULT_WARMUP_RATIO = 0.05
+DEFAULT_WARMUP_STEPS = 2
 
 
 LORA_TARGET_MODULES = [
@@ -161,9 +161,9 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--warmup-ratio",
-        type=float,
-        default=DEFAULT_WARMUP_RATIO,
+        "--warmup-steps",
+        type=int,
+        default=DEFAULT_WARMUP_STEPS,
     )
 
     parser.add_argument(
@@ -415,7 +415,7 @@ def build_training_config(
 
         lr_scheduler_type="cosine",
 
-        warmup_ratio=args.warmup_ratio,
+        warmup_steps=args.warmup_steps,
 
         # --------------------------------------------
         # Precision
@@ -617,7 +617,7 @@ def save_experiment_config(
             ),
             "optimizer": "paged_adamw_8bit",
             "scheduler": "cosine",
-            "warmup_ratio": args.warmup_ratio,
+            "warmup_steps": args.warmup_steps,
             "assistant_only_loss": True,
             "gradient_checkpointing": True,
             "bf16": True,
