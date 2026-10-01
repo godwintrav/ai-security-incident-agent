@@ -20,6 +20,7 @@ from transformers import (
 from trl import SFTConfig, SFTTrainer
 import os
 from google.colab import userdata
+import wandb
 
 
 # ============================================================
@@ -634,6 +635,7 @@ def main() -> None:
     print("=" * 60)
 
     wandb_api_key = userdata.get('WANDB_API_KEY')
+    PROJECT_NAME = "ai-security-incident-analyzer"
     os.environ["WANDB_API_KEY"] = wandb_api_key
     wandb.login()
 
