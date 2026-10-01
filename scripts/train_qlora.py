@@ -175,6 +175,17 @@ def parse_args() -> argparse.Namespace:
 
     return parser.parse_args()
 
+# ============================================================
+# Memory
+# ============================================================
+
+def print_gpu_memory(label: str):
+    allocated = torch.cuda.memory_allocated() / 1024**3
+    reserved = torch.cuda.memory_reserved() / 1024**3
+
+    print(f"\n{label}")
+    print(f"Allocated: {allocated:.2f} GiB")
+    print(f"Reserved:  {reserved:.2f} GiB")
 
 # ============================================================
 # Dataset
@@ -268,12 +279,17 @@ def load_model(
             "the training precision."
         )
 
+    print_gpu_memory("1. BEFORE MODEL LOAD")
+
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         quantization_config=quantization_config,
         device_map="auto",
         torch_dtype=torch.bfloat16,
     )
+
+    print(f"Memory footprint: {model.get_memory_footprint() / 1e6:.1f} MB")
+    print_gpu_memory("2. AFTER MODEL LOAD")
 
     # KV caching is useful for inference but not training.
     model.config.use_cache = False
@@ -283,6 +299,8 @@ def load_model(
         model,
         use_gradient_checkpointing=True,
     )
+
+    print_gpu_memory("3. AFTER K-BIT PREPARATION")
 
     return model
 
