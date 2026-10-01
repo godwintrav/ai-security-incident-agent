@@ -1,0 +1,173 @@
+{
+  "baseline": "Native Base",
+  "models": [
+    {
+      "label": "Native Base",
+      "metrics_path": "data/evaluation/results/qwen3.5-9b/full_precision/metrics.json",
+      "model_name": "Qwen/Qwen3.5-9B",
+      "total_cases": 104
+    },
+    {
+      "label": "NF4 Base",
+      "metrics_path": "data/evaluation/results/qwen3.5-9b/nf4/metrics.json",
+      "model_name": "Qwen/Qwen3.5-9B",
+      "total_cases": 104
+    }
+  ],
+  "metrics": [
+    {
+      "metric": "Schema validity",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.9808,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.9327,
+          "delta_vs_baseline": -0.04810000000000003
+        }
+      }
+    },
+    {
+      "metric": "Incident type accuracy",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.9216,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.9175,
+          "delta_vs_baseline": -0.0040999999999999925
+        }
+      }
+    },
+    {
+      "metric": "Severity accuracy",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.598,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.6495,
+          "delta_vs_baseline": 0.05149999999999999
+        }
+      }
+    },
+    {
+      "metric": "IOC recall",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.5187,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.6683,
+          "delta_vs_baseline": 0.14959999999999996
+        }
+      }
+    },
+    {
+      "metric": "IOC precision",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.5751,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.6716,
+          "delta_vs_baseline": 0.09650000000000003
+        }
+      }
+    },
+    {
+      "metric": "IOC grounding",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.9689,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.951,
+          "delta_vs_baseline": -0.017900000000000027
+        }
+      }
+    },
+    {
+      "metric": "Placeholder IOC rate",
+      "higher_is_better": false,
+      "values": {
+        "Native Base": {
+          "value": 0.0311,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.049,
+          "delta_vs_baseline": 0.017900000000000003
+        }
+      }
+    },
+    {
+      "metric": "Finding recall",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.975,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.9091,
+          "delta_vs_baseline": -0.06589999999999996
+        }
+      }
+    },
+    {
+      "metric": "Unsupported finding rate",
+      "higher_is_better": false,
+      "values": {
+        "Native Base": {
+          "value": 0.0482,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.0155,
+          "delta_vs_baseline": -0.0327
+        }
+      }
+    },
+    {
+      "metric": "Overclaiming finding rate",
+      "higher_is_better": false,
+      "values": {
+        "Native Base": {
+          "value": 0.0663,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.0415,
+          "delta_vs_baseline": -0.024799999999999996
+        }
+      }
+    },
+    {
+      "metric": "Missing evidence recall",
+      "higher_is_better": true,
+      "values": {
+        "Native Base": {
+          "value": 0.7363,
+          "delta_vs_baseline": 0.0
+        },
+        "NF4 Base": {
+          "value": 0.7126,
+          "delta_vs_baseline": -0.023699999999999943
+        }
+      }
+    }
+  ]
+}
