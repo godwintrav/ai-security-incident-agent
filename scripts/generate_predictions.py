@@ -17,6 +17,8 @@ from transformers import (
 from scripts.validate_incident_dataset import IncidentAnalysis
 
 from peft import PeftModel
+import os
+from huggingface_hub import login
 
 # ============================================================
 # Arguments
@@ -459,6 +461,10 @@ def main():
     args = parse_args()
 
     output_directory = Path(args.output)
+
+    #HF
+    hf_token = os.environ['HF_TOKEN']
+    login(hf_token, add_to_git_credential=True)
 
     output_directory.mkdir(
         parents=True,
