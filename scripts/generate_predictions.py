@@ -16,6 +16,7 @@ from transformers import (
 
 from scripts.validate_incident_dataset import IncidentAnalysis
 
+from peft import PeftModel
 
 # ============================================================
 # Arguments
@@ -83,6 +84,16 @@ def parse_args():
         ),
     )
 
+    parser.add_argument(
+        "--adapter",
+        type=str,
+        default=None,
+        help=(
+            "Optional Hugging Face repo ID or local path containing "
+            "a PEFT/LoRA adapter."
+        ),
+    )
+
     return parser.parse_args()
 
 
@@ -127,6 +138,7 @@ def load_jsonl(path: str) -> list[dict]:
 def load_model(
     model_name: str,
     precision: str,
+    adapter: str = None
 ):
     tokenizer = AutoTokenizer.from_pretrained(
         model_name,
@@ -211,6 +223,15 @@ def load_model(
             torch_dtype=torch.bfloat16,
             trust_remote_code=True,
         )
+
+        if adapter:
+            print(f"Loading PEFT adapter: {adapter}")
+
+            model = PeftModel.from_pretrained(
+                model,
+                adapter,
+                is_trainable=False,
+            )
 
         model.eval()
 
@@ -470,6 +491,7 @@ def main():
     ) = load_model(
         model_name=args.model,
         precision=args.precision,
+        adapter=args.adapter
     )
 
     completed_cases = load_completed_cases(
