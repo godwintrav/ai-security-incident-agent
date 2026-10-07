@@ -1,45 +1,45 @@
 {
-  "examples": 224,
+  "examples": 500,
   "system": {
-    "min": 60,
-    "mean": 60.0,
-    "median": 60.0,
-    "p90": 60,
-    "p95": 60,
-    "p99": 60,
-    "max": 60
+    "min": 379,
+    "mean": 379.0,
+    "median": 379.0,
+    "p90": 379,
+    "p95": 379,
+    "p99": 379,
+    "max": 379
   },
   "user": {
-    "min": 224,
-    "mean": 289.81,
-    "median": 279.5,
-    "p90": 343,
-    "p95": 347,
-    "p99": 367,
-    "max": 368
+    "min": 206,
+    "mean": 261.82,
+    "median": 239.0,
+    "p90": 311,
+    "p95": 339,
+    "p99": 391,
+    "max": 395
   },
   "assistant": {
-    "min": 120,
-    "mean": 233.42,
-    "median": 250.0,
-    "p90": 302,
-    "p95": 305,
-    "p99": 335,
-    "max": 336
+    "min": 141,
+    "mean": 314.88,
+    "median": 309.5,
+    "p90": 438,
+    "p95": 457,
+    "p99": 519,
+    "max": 564
   },
   "total": {
-    "min": 429,
-    "mean": 602.23,
-    "median": 595.5,
-    "p90": 716,
-    "p95": 728,
-    "p99": 759,
-    "max": 770
+    "min": 749,
+    "mean": 974.7,
+    "median": 950.5,
+    "p90": 1134,
+    "p95": 1170,
+    "p99": 1301,
+    "max": 1357
   },
   "thresholds": {
     "1024": {
-      "count": 0,
-      "percentage": 0.0
+      "count": 175,
+      "percentage": 35.0
     },
     "2048": {
       "count": 0,
@@ -56,74 +56,74 @@
   },
   "longest_examples": [
     {
-      "training_index": 209,
-      "system_tokens": 60,
-      "user_tokens": 367,
-      "assistant_tokens": 324,
-      "total_tokens": 770
+      "training_index": 138,
+      "system_tokens": 379,
+      "user_tokens": 395,
+      "assistant_tokens": 564,
+      "total_tokens": 1357
     },
     {
-      "training_index": 210,
-      "system_tokens": 60,
-      "user_tokens": 363,
-      "assistant_tokens": 320,
-      "total_tokens": 762
+      "training_index": 178,
+      "system_tokens": 379,
+      "user_tokens": 395,
+      "assistant_tokens": 564,
+      "total_tokens": 1357
     },
     {
-      "training_index": 211,
-      "system_tokens": 60,
-      "user_tokens": 363,
-      "assistant_tokens": 319,
-      "total_tokens": 761
+      "training_index": 137,
+      "system_tokens": 379,
+      "user_tokens": 395,
+      "assistant_tokens": 522,
+      "total_tokens": 1315
     },
     {
-      "training_index": 216,
-      "system_tokens": 60,
-      "user_tokens": 353,
-      "assistant_tokens": 319,
-      "total_tokens": 751
+      "training_index": 136,
+      "system_tokens": 379,
+      "user_tokens": 391,
+      "assistant_tokens": 518,
+      "total_tokens": 1307
     },
     {
-      "training_index": 208,
-      "system_tokens": 60,
-      "user_tokens": 349,
-      "assistant_tokens": 318,
-      "total_tokens": 746
+      "training_index": 177,
+      "system_tokens": 379,
+      "user_tokens": 391,
+      "assistant_tokens": 518,
+      "total_tokens": 1307
     },
     {
-      "training_index": 206,
-      "system_tokens": 60,
-      "user_tokens": 368,
-      "assistant_tokens": 290,
-      "total_tokens": 737
+      "training_index": 34,
+      "system_tokens": 379,
+      "user_tokens": 373,
+      "assistant_tokens": 529,
+      "total_tokens": 1300
     },
     {
-      "training_index": 207,
-      "system_tokens": 60,
-      "user_tokens": 367,
-      "assistant_tokens": 289,
-      "total_tokens": 735
+      "training_index": 176,
+      "system_tokens": 379,
+      "user_tokens": 380,
+      "assistant_tokens": 522,
+      "total_tokens": 1300
     },
     {
-      "training_index": 163,
-      "system_tokens": 60,
-      "user_tokens": 348,
-      "assistant_tokens": 305,
-      "total_tokens": 732
+      "training_index": 277,
+      "system_tokens": 379,
+      "user_tokens": 383,
+      "assistant_tokens": 497,
+      "total_tokens": 1278
     },
     {
-      "training_index": 161,
-      "system_tokens": 60,
-      "user_tokens": 347,
-      "assistant_tokens": 305,
-      "total_tokens": 731
+      "training_index": 179,
+      "system_tokens": 379,
+      "user_tokens": 395,
+      "assistant_tokens": 479,
+      "total_tokens": 1272
     },
     {
-      "training_index": 162,
-      "system_tokens": 60,
-      "user_tokens": 347,
-      "assistant_tokens": 305,
-      "total_tokens": 731
+      "training_index": 237,
+      "system_tokens": 379,
+      "user_tokens": 380,
+      "assistant_tokens": 494,
+      "total_tokens": 1272
     }
   ]
 }

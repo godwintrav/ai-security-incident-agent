@@ -1,0 +1,19 @@
+{
+  "model": "Qwen/Qwen3.5-9B",
+  "dataset": "data/evaluation/regression_sets/regression.jsonl",
+  "examples": 104,
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "precision": "nf4",
+  "max_new_tokens": 1024,
+  "do_sample": false,
+  "quantized": true,
+  "quantization": {
+    "library": "bitsandbytes",
+    "load_in_4bit": true,
+    "quant_type": "nf4",
+    "double_quant": true,
+    "compute_dtype": "bfloat16"
+  },
+  "lora": false
+}

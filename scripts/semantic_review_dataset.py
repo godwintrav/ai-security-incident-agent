@@ -1,12 +1,18 @@
 import argparse
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
 from collections import Counter
 from pathlib import Path
 from typing import Literal
 
 from litellm import completion
 from pydantic import BaseModel, Field, ValidationError
+
+
+# Protect concurrent checkpoint writes to the shared JSONL output file.
+OUTPUT_LOCK = Lock()
 
 
 # ============================================================
@@ -633,11 +639,47 @@ def append_review(
         review=review,
     )
 
-    with output_path.open("a", encoding="utf-8") as file:
-        file.write(
-            record.model_dump_json()
-            + "\n"
-        )
+    with OUTPUT_LOCK:
+        with output_path.open("a", encoding="utf-8") as file:
+            file.write(
+                record.model_dump_json()
+                + "\n"
+            )
+
+
+# ============================================================
+# Process one example
+# ============================================================
+
+
+def process_example(
+    model: str,
+    index: int,
+    example: dict,
+) -> ReviewRecord:
+    """
+    Review one training example.
+
+    This function is intentionally self-contained so it can be submitted
+    safely to ThreadPoolExecutor. The existing review_example() function
+    still owns retry and schema-validation behavior.
+    """
+
+    incident_input, expected_analysis = (
+        extract_training_example(example)
+    )
+
+    review = review_example(
+        model=model,
+        index=index,
+        incident_input=incident_input,
+        expected_analysis=expected_analysis,
+    )
+
+    return ReviewRecord(
+        training_index=index,
+        review=review,
+    )
 
 
 # ============================================================
@@ -825,7 +867,20 @@ def main() -> int:
         help="Maximum number of examples to review.",
     )
 
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help=(
+            "Maximum number of semantic reviews to run concurrently. "
+            "For a local Ollama judge, start with 4 and benchmark before increasing."
+        ),
+    )
+
     args = parser.parse_args()
+
+    if args.workers < 1:
+        parser.error("--workers must be at least 1.")
 
     examples = load_jsonl(args.train)
 
@@ -866,58 +921,95 @@ def main() -> int:
 
     reviews: list[ReviewRecord] = []
 
-    for index in selected_indices:
+    print(f"Concurrent workers: {args.workers}")
 
-        example = examples[index]
+    # Submit each selected example as an independent review job.
+    # ThreadPoolExecutor is appropriate because completion() is the expensive,
+    # blocking I/O/model call. Bounded workers avoid overwhelming the judge.
+    with ThreadPoolExecutor(
+        max_workers=args.workers
+    ) as executor:
 
-        try:
+        futures = {
+            executor.submit(
+                process_example,
+                args.model,
+                index,
+                examples[index],
+            ): index
+            for index in selected_indices
+        }
 
-            incident_input, expected_analysis = (
-                extract_training_example(example)
-            )
+        # Consume results as soon as each review finishes.
+        for future in as_completed(futures):
 
-            review = review_example(
-                model=args.model,
-                index=index,
-                incident_input=incident_input,
-                expected_analysis=expected_analysis,
-            )
+            index = futures[future]
 
-            record = ReviewRecord(
-                training_index=index,
-                review=review,
-            )
+            try:
+                record = future.result()
 
-            reviews.append(record)
+                reviews.append(record)
 
-            append_review(
-                output_path=args.output,
-                index=index,
-                review=review,
-            )
+                # Checkpoint immediately. The write is protected by OUTPUT_LOCK,
+                # so a crash does not lose all successfully completed reviews.
+                append_review(
+                    output_path=args.output,
+                    index=record.training_index,
+                    review=record.review,
+                )
 
-            icon = {
-                "pass": "✅",
-                "needs_review": "⚠️",
-                "fail": "❌",
-            }[review.verdict]
+                icon = {
+                    "pass": "✅",
+                    "needs_review": "⚠️",
+                    "fail": "❌",
+                }[record.review.verdict]
 
-            print(
-                f"{icon} training[{index}] "
-                f"{review.verdict.upper()} "
-                f"{review.overall_score}/5"
-            )
+                print(
+                    f"{icon} training[{index}] "
+                    f"{record.review.verdict.upper()} "
+                    f"{record.review.overall_score}/5"
+                )
 
-        except (
-            ValidationError,
-            ValueError,
-            KeyError,
-            TypeError,
-        ) as exc:
+            except (
+                ValidationError,
+                ValueError,
+                KeyError,
+                TypeError,
+            ) as exc:
 
-            print(
-                f"💥 training[{index}] "
-                f"review failed: {exc}"
+                print(
+                    f"💥 training[{index}] "
+                    f"review failed: {exc}"
+                )
+
+            except Exception as exc:
+                # Keep one unexpected worker failure from cancelling all other
+                # reviews. The index is retained so the failed example can be
+                # rerun explicitly with --start/--limit if needed.
+                print(
+                    f"💥 training[{index}] "
+                    f"unexpected review failure: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+
+    # as_completed() returns completion order, not dataset order.
+    # Restore deterministic ordering for the final artifact and summary.
+    reviews.sort(
+        key=lambda record: record.training_index
+    )
+
+    # During execution append_review() acts as a crash-safe checkpoint.
+    # On successful completion, rewrite the file once in deterministic
+    # training_index order.
+    with args.output.open(
+        "w",
+        encoding="utf-8",
+    ) as file:
+
+        for record in reviews:
+            file.write(
+                record.model_dump_json()
+                + "\n"
             )
 
     print_summary(reviews)
