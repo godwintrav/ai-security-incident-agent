@@ -515,7 +515,8 @@ def main():
         "do_sample": False,
         "quantized": args.precision == "nf4",
         "quantization": quantization_metadata,
-        "lora": False,
+        "lora": args.adapter is not None,
+        "adapter": args.adapter,
     }
 
     save_config(
