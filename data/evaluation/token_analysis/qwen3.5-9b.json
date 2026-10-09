@@ -1,5 +1,5 @@
 {
-  "examples": 500,
+  "examples": 600,
   "system": {
     "min": 379,
     "mean": 379.0,
@@ -10,36 +10,36 @@
     "max": 379
   },
   "user": {
-    "min": 206,
-    "mean": 261.82,
-    "median": 239.0,
-    "p90": 311,
-    "p95": 339,
-    "p99": 391,
-    "max": 395
+    "min": 192,
+    "mean": 327.91,
+    "median": 307.0,
+    "p90": 465,
+    "p95": 483,
+    "p99": 553,
+    "max": 572
   },
   "assistant": {
-    "min": 141,
-    "mean": 314.88,
-    "median": 309.5,
-    "p90": 438,
-    "p95": 457,
-    "p99": 519,
-    "max": 564
+    "min": 123,
+    "mean": 382.7,
+    "median": 386.0,
+    "p90": 552,
+    "p95": 574,
+    "p99": 628,
+    "max": 668
   },
   "total": {
-    "min": 749,
-    "mean": 974.7,
-    "median": 950.5,
-    "p90": 1134,
-    "p95": 1170,
-    "p99": 1301,
-    "max": 1357
+    "min": 733,
+    "mean": 1108.61,
+    "median": 1091.0,
+    "p90": 1383,
+    "p95": 1446,
+    "p99": 1518,
+    "max": 1622
   },
   "thresholds": {
     "1024": {
-      "count": 175,
-      "percentage": 35.0
+      "count": 360,
+      "percentage": 60.0
     },
     "2048": {
       "count": 0,
@@ -56,74 +56,74 @@
   },
   "longest_examples": [
     {
-      "training_index": 138,
+      "training_index": 295,
       "system_tokens": 379,
-      "user_tokens": 395,
-      "assistant_tokens": 564,
-      "total_tokens": 1357
+      "user_tokens": 556,
+      "assistant_tokens": 668,
+      "total_tokens": 1622
     },
     {
-      "training_index": 178,
+      "training_index": 207,
       "system_tokens": 379,
-      "user_tokens": 395,
-      "assistant_tokens": 564,
-      "total_tokens": 1357
-    },
-    {
-      "training_index": 137,
-      "system_tokens": 379,
-      "user_tokens": 395,
-      "assistant_tokens": 522,
-      "total_tokens": 1315
-    },
-    {
-      "training_index": 136,
-      "system_tokens": 379,
-      "user_tokens": 391,
-      "assistant_tokens": 518,
-      "total_tokens": 1307
-    },
-    {
-      "training_index": 177,
-      "system_tokens": 379,
-      "user_tokens": 391,
-      "assistant_tokens": 518,
-      "total_tokens": 1307
-    },
-    {
-      "training_index": 34,
-      "system_tokens": 379,
-      "user_tokens": 373,
-      "assistant_tokens": 529,
-      "total_tokens": 1300
-    },
-    {
-      "training_index": 176,
-      "system_tokens": 379,
-      "user_tokens": 380,
-      "assistant_tokens": 522,
-      "total_tokens": 1300
-    },
-    {
-      "training_index": 277,
-      "system_tokens": 379,
-      "user_tokens": 383,
-      "assistant_tokens": 497,
-      "total_tokens": 1278
+      "user_tokens": 572,
+      "assistant_tokens": 608,
+      "total_tokens": 1578
     },
     {
       "training_index": 179,
       "system_tokens": 379,
-      "user_tokens": 395,
-      "assistant_tokens": 479,
-      "total_tokens": 1272
+      "user_tokens": 569,
+      "assistant_tokens": 604,
+      "total_tokens": 1571
     },
     {
-      "training_index": 237,
+      "training_index": 414,
       "system_tokens": 379,
-      "user_tokens": 380,
-      "assistant_tokens": 494,
-      "total_tokens": 1272
+      "user_tokens": 513,
+      "assistant_tokens": 630,
+      "total_tokens": 1541
+    },
+    {
+      "training_index": 299,
+      "system_tokens": 379,
+      "user_tokens": 468,
+      "assistant_tokens": 664,
+      "total_tokens": 1530
+    },
+    {
+      "training_index": 278,
+      "system_tokens": 379,
+      "user_tokens": 486,
+      "assistant_tokens": 634,
+      "total_tokens": 1518
+    },
+    {
+      "training_index": 451,
+      "system_tokens": 379,
+      "user_tokens": 500,
+      "assistant_tokens": 619,
+      "total_tokens": 1517
+    },
+    {
+      "training_index": 335,
+      "system_tokens": 379,
+      "user_tokens": 483,
+      "assistant_tokens": 627,
+      "total_tokens": 1508
+    },
+    {
+      "training_index": 341,
+      "system_tokens": 379,
+      "user_tokens": 553,
+      "assistant_tokens": 554,
+      "total_tokens": 1505
+    },
+    {
+      "training_index": 85,
+      "system_tokens": 379,
+      "user_tokens": 486,
+      "assistant_tokens": 607,
+      "total_tokens": 1491
     }
   ]
 }
