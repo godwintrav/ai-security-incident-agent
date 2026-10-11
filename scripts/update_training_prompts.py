@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-PROMPT_PATH = Path("app/prompts/incident_analysis_system.txt")
+PROMPT_PATH = Path("app/prompts/incident_analysis_system_v2.txt")
 TRAIN_PATH = Path("data/evaluation/fine_tuning/train.jsonl")
 
 
