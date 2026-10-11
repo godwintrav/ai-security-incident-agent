@@ -15,7 +15,7 @@
     },
     {
       "label": "QLoRA NF4",
-      "metrics_path": "data/evaluation/results/qwen3.5-9b/qlora-run-001/metrics.json",
+      "metrics_path": "data/evaluation/results/qwen3.5-9b/qlora-run-004/metrics.json",
       "model_name": "Qwen/Qwen3.5-9B",
       "total_cases": 104
     }
@@ -70,8 +70,8 @@
           "delta_vs_baseline": 0.05149999999999999
         },
         "QLoRA NF4": {
-          "value": 0.75,
-          "delta_vs_baseline": 0.15200000000000002
+          "value": 0.5769,
+          "delta_vs_baseline": -0.021100000000000008
         }
       }
     },
@@ -88,8 +88,8 @@
           "delta_vs_baseline": 0.14959999999999996
         },
         "QLoRA NF4": {
-          "value": 0.8761,
-          "delta_vs_baseline": 0.35739999999999994
+          "value": 0.3028,
+          "delta_vs_baseline": -0.21590000000000004
         }
       }
     },
@@ -106,8 +106,8 @@
           "delta_vs_baseline": 0.09650000000000003
         },
         "QLoRA NF4": {
-          "value": 0.8197,
-          "delta_vs_baseline": 0.24460000000000004
+          "value": 0.88,
+          "delta_vs_baseline": 0.30490000000000006
         }
       }
     },
@@ -124,8 +124,8 @@
           "delta_vs_baseline": -0.017900000000000027
         },
         "QLoRA NF4": {
-          "value": 1.0,
-          "delta_vs_baseline": 0.031100000000000017
+          "value": 0.9867,
+          "delta_vs_baseline": 0.017800000000000038
         }
       }
     },
@@ -142,8 +142,8 @@
           "delta_vs_baseline": 0.017900000000000003
         },
         "QLoRA NF4": {
-          "value": 0.0,
-          "delta_vs_baseline": -0.0311
+          "value": 0.0133,
+          "delta_vs_baseline": -0.0178
         }
       }
     },
@@ -160,8 +160,8 @@
           "delta_vs_baseline": -0.06589999999999996
         },
         "QLoRA NF4": {
-          "value": 0.3434,
-          "delta_vs_baseline": -0.6315999999999999
+          "value": 0.6084,
+          "delta_vs_baseline": -0.3665999999999999
         }
       }
     },
@@ -214,8 +214,8 @@
           "delta_vs_baseline": -0.023699999999999943
         },
         "QLoRA NF4": {
-          "value": 0.573,
-          "delta_vs_baseline": -0.1633
+          "value": 0.5568,
+          "delta_vs_baseline": -0.1795
         }
       }
     }
