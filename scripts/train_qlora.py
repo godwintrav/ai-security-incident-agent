@@ -47,9 +47,9 @@ DEFAULT_MAX_LENGTH = 1024
 
 DEFAULT_LORA_R = 32
 DEFAULT_LORA_ALPHA = 64
-DEFAULT_LORA_DROPOUT = 0.05
+DEFAULT_LORA_DROPOUT = 0.1
 
-DEFAULT_LEARNING_RATE = 2e-4
+DEFAULT_LEARNING_RATE = 1e-4
 DEFAULT_EPOCHS = 3
 
 DEFAULT_BATCH_SIZE = 8
@@ -63,6 +63,9 @@ LORA_TARGET_MODULES = [
     "k_proj",
     "v_proj",
     "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
 ]
 
 
