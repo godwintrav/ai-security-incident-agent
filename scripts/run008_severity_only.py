@@ -99,7 +99,10 @@ def main():
                 do_sample=False,
                 pad_token_id=tokenizer.eos_token_id,
             )
-        raw = tokenizer.decode(output[0, inputs.shape[-1]:], skip_special_tokens=True).strip()
+        raw = tokenizer.decode(
+            output[0, inputs["input_ids"].shape[-1]:],
+            skip_special_tokens=True
+        ).strip()
         severity, error = extract_severity(raw)
         row = {
             'case_id': cid, 'expected_severity': expected,
