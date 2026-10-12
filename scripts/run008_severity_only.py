@@ -94,9 +94,11 @@ def main():
         inputs = inputs.to(device)
         with torch.inference_mode():
             output = model.generate(
-                input_ids=inputs, max_new_tokens=args.max_new_tokens,
-                do_sample=False, pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id)
+                **inputs,
+                max_new_tokens=128,
+                do_sample=False,
+                pad_token_id=tokenizer.eos_token_id,
+            )
         raw = tokenizer.decode(output[0, inputs.shape[-1]:], skip_special_tokens=True).strip()
         severity, error = extract_severity(raw)
         row = {
