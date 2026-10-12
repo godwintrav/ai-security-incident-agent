@@ -96,6 +96,16 @@ def parse_args():
         ),
     )
 
+    parser.add_argument(
+        "--revision",
+        type=str,
+        default=None,
+        help=(
+            "Optional Hugging Face repo revision hash for a specific revision"
+            "a PEFT/LoRA adapter revision."
+        ),
+    )
+
     return parser.parse_args()
 
 
@@ -140,7 +150,8 @@ def load_jsonl(path: str) -> list[dict]:
 def load_model(
     model_name: str,
     precision: str,
-    adapter: str = None
+    adapter: str = None,
+    revision: str = None
 ):
     tokenizer = AutoTokenizer.from_pretrained(
         model_name,
@@ -229,11 +240,19 @@ def load_model(
         if adapter:
             print(f"Loading PEFT adapter: {adapter}")
 
-            model = PeftModel.from_pretrained(
-                model,
-                adapter,
-                is_trainable=False,
-            )
+            if revision is not None:
+                model = PeftModel.from_pretrained(
+                    model,
+                    adapter,
+                    revision=revision,
+                    is_trainable=False,
+                )
+            else:
+                model = PeftModel.from_pretrained(
+                    model,
+                    adapter,
+                    is_trainable=False,
+                )
 
         model.eval()
 
