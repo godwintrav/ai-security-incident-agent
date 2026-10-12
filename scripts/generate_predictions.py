@@ -516,7 +516,8 @@ def main():
     ) = load_model(
         model_name=args.model,
         precision=args.precision,
-        adapter=args.adapter
+        adapter=args.adapter,
+        revision=args.revision
     )
 
     completed_cases = load_completed_cases(
