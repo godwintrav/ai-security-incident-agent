@@ -87,16 +87,6 @@ class IncidentAnalysis(BaseModel):
         description="Classified type of security incident."
     )
 
-    severity: Severity = Field(
-        description="Severity of the incident based on the supplied evidence."
-    )
-
-    confidence: float = Field(
-        description="Overall confidence in the incident analysis.",
-        ge=0.0,
-        le=1.0,
-    )
-
     iocs: list[IOC] = Field(
         description="Indicators of compromise identified from the supplied evidence."
     )
@@ -111,4 +101,14 @@ class IncidentAnalysis(BaseModel):
 
     analysis_summary: str = Field(
         description="Concise evidence-grounded summary of the incident analysis."
+    )
+
+    severity: Severity = Field(
+        description="Severity of the incident based on the supplied evidence."
+    )
+    
+    confidence: float = Field(
+        description="Overall confidence in the incident analysis.",
+        ge=0.0,
+        le=1.0,
     )

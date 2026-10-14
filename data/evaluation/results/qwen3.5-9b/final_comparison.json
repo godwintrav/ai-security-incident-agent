@@ -15,7 +15,7 @@
     },
     {
       "label": "QLoRA NF4",
-      "metrics_path": "data/evaluation/results/qwen3.5-9b/qlora-run-008/metrics.json",
+      "metrics_path": "data/evaluation/results/qwen3.5-9b/qlora-run-009/metrics.json",
       "model_name": "Qwen/Qwen3.5-9B",
       "total_cases": 104
     }
@@ -52,8 +52,8 @@
           "delta_vs_baseline": -0.0040999999999999925
         },
         "QLoRA NF4": {
-          "value": 0.9423,
-          "delta_vs_baseline": 0.02070000000000005
+          "value": 0.8077,
+          "delta_vs_baseline": -0.1139
         }
       }
     },
@@ -70,8 +70,8 @@
           "delta_vs_baseline": 0.05149999999999999
         },
         "QLoRA NF4": {
-          "value": 0.3942,
-          "delta_vs_baseline": -0.20379999999999998
+          "value": 0.5769,
+          "delta_vs_baseline": -0.021100000000000008
         }
       }
     },
@@ -88,8 +88,8 @@
           "delta_vs_baseline": 0.14959999999999996
         },
         "QLoRA NF4": {
-          "value": 0.9037,
-          "delta_vs_baseline": 0.3849999999999999
+          "value": 0.8303,
+          "delta_vs_baseline": 0.3116
         }
       }
     },
@@ -106,8 +106,8 @@
           "delta_vs_baseline": 0.09650000000000003
         },
         "QLoRA NF4": {
-          "value": 0.912,
-          "delta_vs_baseline": 0.3369000000000001
+          "value": 0.8873,
+          "delta_vs_baseline": 0.31220000000000003
         }
       }
     },
@@ -160,8 +160,8 @@
           "delta_vs_baseline": -0.06589999999999996
         },
         "QLoRA NF4": {
-          "value": 0.9759,
-          "delta_vs_baseline": 0.0009000000000000119
+          "value": 0.9819,
+          "delta_vs_baseline": 0.006900000000000017
         }
       }
     },
@@ -214,8 +214,8 @@
           "delta_vs_baseline": -0.023699999999999943
         },
         "QLoRA NF4": {
-          "value": 0.6108,
-          "delta_vs_baseline": -0.12549999999999994
+          "value": 0.6,
+          "delta_vs_baseline": -0.13629999999999998
         }
       }
     }

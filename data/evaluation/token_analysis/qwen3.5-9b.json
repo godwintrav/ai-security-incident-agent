@@ -1,49 +1,49 @@
 {
-  "examples": 256,
+  "examples": 864,
   "system": {
-    "min": 917,
-    "mean": 917.0,
-    "median": 917.0,
-    "p90": 917,
-    "p95": 917,
-    "p99": 917,
-    "max": 917
+    "min": 1961,
+    "mean": 1961.0,
+    "median": 1961.0,
+    "p90": 1961,
+    "p95": 1961,
+    "p99": 1961,
+    "max": 1961
   },
   "user": {
-    "min": 203,
-    "mean": 504.16,
-    "median": 655.0,
-    "p90": 672,
-    "p95": 674,
-    "p99": 677,
-    "max": 680
+    "min": 192,
+    "mean": 346.2,
+    "median": 356.0,
+    "p90": 408,
+    "p95": 468,
+    "p99": 522,
+    "max": 572
   },
   "assistant": {
-    "min": 214,
-    "mean": 666.3,
-    "median": 718.5,
-    "p90": 802,
-    "p95": 913,
-    "p99": 1074,
-    "max": 1215
+    "min": 209,
+    "mean": 546.66,
+    "median": 479.0,
+    "p90": 858,
+    "p95": 994,
+    "p99": 1117,
+    "max": 1268
   },
   "total": {
-    "min": 1361,
-    "mean": 2106.46,
-    "median": 2313.0,
-    "p90": 2340,
-    "p95": 2350,
-    "p99": 2516,
-    "max": 2704
+    "min": 2398,
+    "mean": 2872.86,
+    "median": 2813.5,
+    "p90": 3240,
+    "p95": 3448,
+    "p99": 3587,
+    "max": 3820
   },
   "thresholds": {
     "1024": {
-      "count": 256,
+      "count": 864,
       "percentage": 100.0
     },
     "2048": {
-      "count": 171,
-      "percentage": 66.8
+      "count": 864,
+      "percentage": 100.0
     },
     "4096": {
       "count": 0,
@@ -56,74 +56,74 @@
   },
   "longest_examples": [
     {
-      "training_index": 32,
-      "system_tokens": 917,
-      "user_tokens": 553,
-      "assistant_tokens": 1215,
-      "total_tokens": 2704
+      "training_index": 317,
+      "system_tokens": 1961,
+      "user_tokens": 572,
+      "assistant_tokens": 1268,
+      "total_tokens": 3820
     },
     {
-      "training_index": 92,
-      "system_tokens": 917,
-      "user_tokens": 553,
-      "assistant_tokens": 1112,
-      "total_tokens": 2601
+      "training_index": 75,
+      "system_tokens": 1961,
+      "user_tokens": 569,
+      "assistant_tokens": 1257,
+      "total_tokens": 3806
     },
     {
-      "training_index": 40,
-      "system_tokens": 917,
-      "user_tokens": 549,
-      "assistant_tokens": 1067,
-      "total_tokens": 2552
+      "training_index": 11,
+      "system_tokens": 1961,
+      "user_tokens": 556,
+      "assistant_tokens": 1228,
+      "total_tokens": 3764
     },
     {
-      "training_index": 20,
-      "system_tokens": 917,
-      "user_tokens": 467,
-      "assistant_tokens": 1082,
-      "total_tokens": 2485
+      "training_index": 396,
+      "system_tokens": 1961,
+      "user_tokens": 567,
+      "assistant_tokens": 1164,
+      "total_tokens": 3711
     },
     {
-      "training_index": 117,
-      "system_tokens": 917,
-      "user_tokens": 478,
-      "assistant_tokens": 1035,
-      "total_tokens": 2449
+      "training_index": 647,
+      "system_tokens": 1961,
+      "user_tokens": 558,
+      "assistant_tokens": 1130,
+      "total_tokens": 3668
     },
     {
-      "training_index": 79,
-      "system_tokens": 917,
-      "user_tokens": 467,
-      "assistant_tokens": 1045,
-      "total_tokens": 2448
+      "training_index": 229,
+      "system_tokens": 1961,
+      "user_tokens": 486,
+      "assistant_tokens": 1163,
+      "total_tokens": 3629
     },
     {
-      "training_index": 64,
-      "system_tokens": 917,
-      "user_tokens": 473,
-      "assistant_tokens": 1026,
-      "total_tokens": 2435
+      "training_index": 121,
+      "system_tokens": 1961,
+      "user_tokens": 483,
+      "assistant_tokens": 1149,
+      "total_tokens": 3612
     },
     {
-      "training_index": 87,
-      "system_tokens": 917,
-      "user_tokens": 463,
-      "assistant_tokens": 1017,
-      "total_tokens": 2416
+      "training_index": 209,
+      "system_tokens": 1961,
+      "user_tokens": 513,
+      "assistant_tokens": 1116,
+      "total_tokens": 3609
     },
     {
-      "training_index": 9,
-      "system_tokens": 917,
-      "user_tokens": 477,
-      "assistant_tokens": 970,
-      "total_tokens": 2383
+      "training_index": 126,
+      "system_tokens": 1961,
+      "user_tokens": 500,
+      "assistant_tokens": 1117,
+      "total_tokens": 3597
     },
     {
-      "training_index": 65,
-      "system_tokens": 917,
-      "user_tokens": 469,
-      "assistant_tokens": 975,
-      "total_tokens": 2380
+      "training_index": 551,
+      "system_tokens": 1961,
+      "user_tokens": 486,
+      "assistant_tokens": 1114,
+      "total_tokens": 3580
     }
   ]
 }

@@ -95,13 +95,6 @@ class MissingEvidence(BaseModel):
 class IncidentAnalysis(BaseModel):
     incident_type: IncidentType
 
-    severity: Severity
-
-    confidence: float = Field(
-        ge=0.0,
-        le=1.0,
-    )
-
     iocs: list[IOC]
 
     findings: list[Finding]
@@ -109,6 +102,13 @@ class IncidentAnalysis(BaseModel):
     missing_evidence: list[MissingEvidence]
 
     analysis_summary: str
+
+    severity: Severity
+    
+    confidence: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
 
 
 # ============================================================
