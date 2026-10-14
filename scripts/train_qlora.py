@@ -52,8 +52,8 @@ DEFAULT_LORA_DROPOUT = 0.05
 DEFAULT_LEARNING_RATE = 2e-4
 DEFAULT_EPOCHS = 3
 
-DEFAULT_BATCH_SIZE = 4
-DEFAULT_GRADIENT_ACCUMULATION = 4
+DEFAULT_BATCH_SIZE = 8
+DEFAULT_GRADIENT_ACCUMULATION = 1
 
 DEFAULT_WARMUP_STEPS = 2
 
@@ -63,9 +63,6 @@ LORA_TARGET_MODULES = [
     "k_proj",
     "v_proj",
     "o_proj",
-    "gate_proj",
-    "up_proj",
-    "down_proj"
 ]
 
 
