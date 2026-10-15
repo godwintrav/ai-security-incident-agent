@@ -1,7 +1,7 @@
 import os
 from typing import Any
 import requests
-from app.tools.models.search_cve_model import CVEInfo, CVESearchResult
+from app.schemas.search_cve_model import CVEInfo, CVESearchResult
 
 class SearchCVE():
     """This class is responsible for searching for known vulnerabilities for certain products and versions"""

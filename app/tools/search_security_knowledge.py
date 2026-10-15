@@ -1,5 +1,5 @@
 from app.rag.retriever import Retriever
-from app.tools.models.search_security_knowledge_model import SecurityKnowledgeResult, SecurityKnowledgeSearchResult
+from app.schemas.search_security_knowledge_model import SecurityKnowledgeResult, SecurityKnowledgeSearchResult
 
 class SearchSecurityKnowledge():
     """This class is used to call our rag pipeline and search for information using our rag pipeline"""

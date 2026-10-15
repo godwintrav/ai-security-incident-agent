@@ -403,9 +403,9 @@ def build_training_config(
         # Optimizer
         # --------------------------------------------
 
-        optim="paged_adamw_8bit",
+        optim="paged_adamw_32bit",
 
-        weight_decay=0.0,
+        weight_decay=0.001,
 
         max_grad_norm=1.0,
 

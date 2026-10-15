@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from app.tools.models.incident_playbook_model import IncidentPlaybook
+from app.schemas.incident_playbook_model import IncidentPlaybook
 
 class IncidentPlaybookRetriever():
     """This class is responsible for fetching and returning incident playbooks for specific incidents"""

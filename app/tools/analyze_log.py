@@ -1,7 +1,7 @@
 import os
 from openai import OpenAI
 from app.prompts.prompts import LOG_ANALYSIS_SYSTEM_PROMPT
-from app.tools.models.analyze_log_model import LogAnalysis
+from app.schemas.analyze_log_model import LogAnalysis
 from litellm import completion
 
 
