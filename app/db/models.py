@@ -51,18 +51,6 @@ class InvestigationDB(Base):
         nullable=False,
     )
 
-    cve_results: Mapped[list[dict[str, Any]]] = mapped_column(
-        JSONB,
-        default=list,
-        nullable=False,
-    )
-    
-    playbook: Mapped[dict[str, Any]] = mapped_column(
-        JSONB,
-        default=list,
-        nullable=True,
-    )
-
     analyses: Mapped[list[dict[str, Any]]] = mapped_column(
         JSONB,
         default=list,

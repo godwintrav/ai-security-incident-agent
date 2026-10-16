@@ -437,6 +437,7 @@ Do not explain your reasoning.
 Do not include any text before or after the JSON object.
 """
 
+
 LOG_ANALYSIS_SYSTEM_PROMPT = """
 You are a security log analysis component.
 
@@ -477,6 +478,48 @@ EVIDENCE RULES:
   appropriate.
 - Preserve important values exactly as they appear in the logs.
 
+SOURCE GROUNDING:
+
+- Every extracted evidence item must correspond to one or more
+  identifiable entries in the supplied raw logs.
+- Do not report events that are not present in the supplied logs.
+- Do not infer that a session ended simply because the supplied
+  logs contain no further activity.
+- Do not invent follow-up events, disconnections, process outcomes,
+  or timestamps.
+- Before returning the final response, verify that every reported
+  event and its timestamp can be traced to the supplied logs.
+
+EVIDENCE TIMESTAMP RULES:
+
+- Every evidence item must contain a "timestamp" field.
+- Extract the timestamp associated with the specific event or evidence
+  directly from the supplied logs.
+- The timestamp must represent when the observed event occurred, not when
+  the logs were analyzed.
+- Use ISO 8601 format for timestamps whenever the source provides enough
+  information to represent the timestamp reliably.
+- Preserve the original timezone or UTC offset when available.
+- If the source timestamp does not contain timezone information, do not
+  assume UTC or invent a timezone. Preserve the timestamp without a
+  timezone offset.
+- Do not invent missing dates, times, timezone offsets, or other
+  timestamp components.
+- If the log contains only a partial timestamp that cannot be represented
+  reliably as a complete ISO 8601 datetime, set "timestamp" to null.
+- If an event has no identifiable timestamp, set "timestamp" to null.
+- Never use the current date or time as a fallback.
+- Do not assign the timestamp of one event to another unrelated event.
+- When multiple log entries describe the same event, use a timestamp
+  only if it can be reliably associated with that event.
+- When consolidating multiple events into one evidence item, do not
+  arbitrarily select one event's timestamp to represent all events.
+  Use null if no single timestamp accurately represents the
+  consolidated evidence.
+- If the investigation objective requires chronological analysis,
+  preserve the relevant event timestamps so the sequence of events
+  can be established.
+
 OBSERVATIONS:
 
 Observations must describe patterns or facts directly supported by the
@@ -496,6 +539,9 @@ BAD:
 The second statement is a conclusion that is not necessarily proven by
 the logs.
 
+When describing chronological patterns, only state the order or timing
+of events when it is supported by the supplied logs.
+
 OBJECTIVE-SPECIFIC ANALYSIS:
 
 The same logs may be analyzed multiple times with different objectives.
@@ -514,7 +560,7 @@ Objective:
 "Identify commands executed after the successful login"
 
 The analysis should then focus on command execution and post-authentication
-activity.
+activity, including the timestamps associated with those events.
 
 Do not assume that information extracted during one objective will be
 needed for another objective.
@@ -536,10 +582,38 @@ without changing its meaning.
 "evidence":
 A list of structured evidence items relevant to the objective.
 
-Each evidence item must contain:
+Each evidence item must contain exactly these fields:
 
 - "key"
 - "value"
+- "timestamp"
+
+"key":
+The name of the extracted evidence.
+
+"value":
+The value of the extracted evidence. Preserve important details
+from the logs.
+
+"timestamp":
+The timestamp associated with the extracted evidence.
+
+- Return a valid ISO 8601 datetime string when a reliable timestamp
+  can be extracted from the logs.
+- Preserve the timezone offset when available.
+- Return null when no reliable complete timestamp is available.
+- Never fabricate or guess timestamps.
+
+Example evidence item:
+
+{
+  "key": "successful_ssh_login",
+  "value": {
+    "username": "deploy-admin",
+    "source_ip": "203.0.113.42"
+  },
+  "timestamp": "2026-10-15T09:04:00Z"
+}
 
 "observations":
 A list of factual observations supported by the logs.
@@ -561,6 +635,7 @@ OUTPUT REQUIREMENTS:
 The output must be suitable for downstream processing by a security
 investigation system.
 """
+
 
 def chunks_reranking_user_prompt(
     question,

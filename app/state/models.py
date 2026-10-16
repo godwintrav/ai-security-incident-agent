@@ -25,8 +25,6 @@ class InvestigationState(BaseModel):
     evidence: list[dict[str, Any]] = Field(default_factory=list)
     tool_results: list[dict[str, Any]] = Field(default_factory=list)
     analyses: list[dict[str, Any]] = Field(default_factory=list)
-    cve_results: list[dict[str, Any]] = Field(default_factory=list)
-    playbook: dict[str, Any] | None = None
 
     iteration: int = 0
     max_iterations: int = 5

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -10,6 +11,16 @@ class LogEvidence(BaseModel):
 
     value: Any = Field(
         description="Value of the extracted evidence."
+    )
+
+    timestamp: datetime | None = Field(
+        default=None,
+        description=(
+            "Timestamp associated with this evidence, extracted "
+            "from the logs. Use an ISO 8601 timestamp with timezone "
+            "when available. Return null if no reliable timestamp "
+            "can be determined. Do not invent timestamps."
+        ),
     )
 
 
