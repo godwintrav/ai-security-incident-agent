@@ -140,6 +140,7 @@ Prefer a smaller number of meaningful, well-supported findings over many repetit
 
 However, do not omit distinct, materially important security behaviors merely to reduce the number of findings.
 
+
 ### Finding Titles
 
 Write concise, descriptive security findings.
@@ -214,6 +215,18 @@ Distinguish:
 If the evidence confirms an outcome, state it directly rather than unnecessarily weakening the conclusion.
 
 Finding confidence represents confidence in the evidence supporting that particular finding.
+
+FINDING SYNTHESIS RULES:
+
+- Group related evidence into meaningful security findings.
+- Do not create one finding for every log event.
+- Each finding must describe a distinct security behavior or risk.
+- Reference multiple evidence IDs when several events support one finding.
+- Prefer 3–7 consolidated findings when sufficient evidence exists.
+- Keep descriptions and assessments concise.
+- Do not repeat the full evidence list in analysis_summary.
+- Include only relevant IOCs and specific missing evidence.
+- Never fabricate or omit critical findings merely to meet a target count.
 
 ## 5. Missing Evidence and Investigation Gaps
 

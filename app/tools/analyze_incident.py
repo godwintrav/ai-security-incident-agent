@@ -19,13 +19,13 @@ class IncidentAnalyzerTool():
         SecurityIncidentAnalyzer = modal.Cls.from_name("security-incident-analyzer", "SecurityIncidentAnalyzer")
         self.securityIncidentAnalyzer = SecurityIncidentAnalyzer()
 
-    def analyze_incident(self, incident: IncidentAnalysisInput) -> IncidentAnalysis:
+    async def analyze_incident(self, incident: IncidentAnalysisInput) -> IncidentAnalysis:
         logging.info("Calling Incident Analyzer Fine Tuned LLM")
         payload = incident.model_dump(
             mode="json",
             exclude_none=True,
         )
-        response = self.securityIncidentAnalyzer.analyze.remote(payload)
+        response = await self.securityIncidentAnalyzer.analyze.remote.aio(payload)
         valid_response = IncidentAnalysis.model_validate(
                     response
                 )

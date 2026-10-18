@@ -20,6 +20,7 @@ class InvestigationState(BaseModel):
     id: UUID
     description: str
     incident_type: str | None = None
+    logs: str
     status: InvestigationStatus
 
     evidence: list[dict[str, Any]] = Field(default_factory=list)

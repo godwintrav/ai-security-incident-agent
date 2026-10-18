@@ -45,12 +45,12 @@ DEFAULT_SEED = 42
 
 DEFAULT_MAX_LENGTH = 1024
 
-DEFAULT_LORA_R = 16
+DEFAULT_LORA_R = 32
 DEFAULT_LORA_ALPHA = DEFAULT_LORA_R * 2
 DEFAULT_LORA_DROPOUT = 0.05
 
 DEFAULT_LEARNING_RATE = 2e-4
-DEFAULT_EPOCHS = 3
+DEFAULT_EPOCHS = 1
 
 DEFAULT_BATCH_SIZE = 4
 DEFAULT_GRADIENT_ACCUMULATION = 1
@@ -63,6 +63,9 @@ LORA_TARGET_MODULES = [
     "k_proj",
     "v_proj",
     "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
 ]
 
 
@@ -438,17 +441,18 @@ def build_training_config(
         # Evaluation
         # --------------------------------------------
 
-        eval_strategy="epoch",
+        eval_strategy="steps",
 
         # --------------------------------------------
         # Checkpoints
         # --------------------------------------------
 
-        save_strategy="epoch",
+        save_strategy="steps",
 
-        save_total_limit=3,
+        save_total_limit=10,
 
         hub_strategy="every_save",
+        save_steps=100
 
         # --------------------------------------------
         # Logging

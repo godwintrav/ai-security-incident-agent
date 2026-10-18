@@ -33,6 +33,11 @@ class InvestigationDB(Base):
     description: Mapped[str] = mapped_column(Text)
     incident_type: Mapped[str | None] = mapped_column(String(100))
 
+    logs: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
     status: Mapped[str] = mapped_column(
         String(30),
         default=InvestigationStatus.PENDING.value,

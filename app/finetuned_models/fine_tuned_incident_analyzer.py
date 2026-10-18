@@ -113,7 +113,7 @@ class SecurityIncidentAnalyzer:
         with torch.inference_mode():
             output = self.fine_tuned_model.generate(
                 **inputs,
-                max_new_tokens=4096,
+                max_new_tokens=8192,
                 do_sample=False,
                 pad_token_id=self.tokenizer.pad_token_id,
             )
@@ -125,6 +125,12 @@ class SecurityIncidentAnalyzer:
             generated,
             skip_special_tokens=True,
         )
+
+        if len(generated) >= 8192:
+            print(
+                "Specialist reached max_new_tokens=%s",
+                max_new_tokens,
+            )
 
         print("Generated tokens:", len(generated))
         print("Response length:", len(response))

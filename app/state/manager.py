@@ -10,6 +10,7 @@ from app.db.models import (
     InvestigationEventDB,
     InvestigationEvidenceDB,
 )
+from app.schemas.analyze_incident_input_model import Evidence
 from app.state.models import (
     InvestigationState,
     InvestigationStatus,
@@ -33,8 +34,10 @@ ALLOWED_TRANSITIONS = {
         InvestigationStatus.ANALYZING,
         InvestigationStatus.FAILED,
         InvestigationStatus.NEEDS_REVIEW,
+        InvestigationStatus.COMPLETED,
     },
     InvestigationStatus.ANALYZING: {
+        InvestigationStatus.INVESTIGATING,
         InvestigationStatus.EVALUATING,
         InvestigationStatus.FAILED,
         InvestigationStatus.NEEDS_REVIEW,
@@ -91,6 +94,7 @@ class InvestigationStateManager:
     async def create_investigation(
         self,
         description: str,
+        logs: str,
         incident_type: str | None = None,
     ) -> InvestigationState:
         if not description.strip():
@@ -99,6 +103,7 @@ class InvestigationStateManager:
         investigation = InvestigationDB(
             description=description,
             incident_type=incident_type,
+            logs=logs
         )
 
         self.session.add(investigation)
@@ -144,10 +149,9 @@ class InvestigationStateManager:
             description=investigation.description,
             incident_type=investigation.incident_type,
             status=InvestigationStatus(investigation.status),
+            logs=investigation.logs,
             evidence=evidence,
             tool_results=investigation.tool_results,
-            cve_results=investigation.cve_results,
-            playbook=investigation.playbook,
             analyses=investigation.analyses,
             iteration=investigation.iteration,
             max_iterations=investigation.max_iterations,
@@ -156,6 +160,23 @@ class InvestigationStateManager:
             created_at=investigation.created_at,
             updated_at=investigation.updated_at,
         )
+
+    async def get_investigation_logs(
+        self,
+        investigation_id: UUID,
+    ) -> str:
+        logs = await self.session.scalar(
+            select(InvestigationDB.logs).where(
+                InvestigationDB.id == investigation_id
+            )
+        )
+
+        if logs is None:
+            raise InvestigationNotFoundError(
+                f"Investigation {investigation_id} not found"
+            )
+
+        return logs
 
     async def update_status(
         self,
@@ -187,11 +208,64 @@ class InvestigationStateManager:
             await self.session.rollback()
             raise
 
+    async def update_iteration(
+        self,
+        investigation_id: UUID,
+        iteration: int,
+    ) -> None:
+        if iteration < 0:
+            raise ValueError("Iteration cannot be negative")
+
+        try:
+            investigation = await self._get_locked(investigation_id)
+            previous = investigation.iteration
+            investigation.iteration = iteration
+
+            await self._record_event(
+                investigation_id,
+                "iteration_updated",
+                f"Iteration updated to {iteration}",
+                {"previous": previous, "current": iteration},
+            )
+
+            await self.session.commit()
+        except Exception:
+            await self.session.rollback()
+            raise
+
+    async def update_incident_type(
+        self,
+        investigation_id: UUID,
+        incident_type: str | None,
+    ) -> None:
+        if incident_type is not None:
+            incident_type = incident_type.strip()
+            if not incident_type or len(incident_type) > 100:
+                raise ValueError("Incident type must contain 1 to 100 characters")
+
+        try:
+            investigation = await self._get_locked(investigation_id)
+            previous = investigation.incident_type
+            investigation.incident_type = incident_type
+
+            await self._record_event(
+                investigation_id,
+                "incident_type_updated",
+                "Incident type updated",
+                {"previous": previous, "current": incident_type},
+            )
+
+            await self.session.commit()
+        except Exception:
+            await self.session.rollback()
+            raise
+
     async def add_evidence(
         self,
         investigation_id: UUID,
-        evidence: dict[str, Any],
+        evidence: Evidence,
     ) -> bool:
+        evidence = evidence.model_dump(mode="json")
         evidence_id = evidence.get("id")
 
         if not isinstance(evidence_id, str) or not evidence_id.strip():
@@ -237,7 +311,8 @@ class InvestigationStateManager:
         self,
         investigation_id: UUID,
         tool_name: str,
-        result: dict[str, Any],
+        result: dict[str, Any] | list[str] | list[dict[str, Any]],
+        iteration: int = 1
     ) -> None:
         try:
             investigation = await self._get_locked(investigation_id)
@@ -247,6 +322,7 @@ class InvestigationStateManager:
                 {
                     "tool": tool_name,
                     "result": jsonable_encoder(result),
+                    "iteration": iteration
                 },
             ]
 

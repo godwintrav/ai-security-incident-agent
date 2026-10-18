@@ -1,0 +1,53 @@
+
+{
+  "incident_type": "ransomware",
+  "objective": "Determine whether ransomware-related activity occurred, identify affected systems and files, assess potential encryption, data exfiltration, and recovery disruption, and establish the scope and impact using available evidence.",
+  "investigation_steps": [
+    "Identify affected hosts, user accounts, and potentially impacted systems.",
+    "Review security alerts, endpoint telemetry, and process execution logs for suspicious activity.",
+    "Identify suspicious executables, scripts, command lines, parent-child process relationships, and execution timestamps.",
+    "Investigate possible initial access methods, including suspicious authentication, phishing, remote access, and exploitation indicators.",
+    "Examine file creation, modification, deletion, and renaming events for patterns consistent with ransomware activity.",
+    "Identify unusual file extensions, ransom-note creation, and rapid modifications across multiple directories.",
+    "Review commands attempting to delete volume shadow copies, backup catalogs, or other recovery mechanisms.",
+    "Determine whether suspicious processes successfully executed and whether file encryption or backup deletion actually occurred.",
+    "Review outbound network connections, suspicious domains, destination IP addresses, and potential data transfers.",
+    "Investigate possible lateral movement and related activity across additional hosts or accounts.",
+    "Correlate endpoint detections, antivirus actions, and process termination events to determine whether suspicious activity was blocked or continued.",
+    "Identify relevant file hashes, executable paths, network indicators, and potentially related vulnerabilities when supported by evidence.",
+    "Assess the extent of affected files, business services, and systems using available telemetry.",
+    "Distinguish confirmed observations from suspected ransomware behavior, unverified encryption, and unconfirmed data exfiltration.",
+    "Identify missing evidence required to determine the incident's scope, impact, and outcome."
+  ],
+  "evidence_sources": [
+    "Endpoint detection and response (EDR) telemetry",
+    "Windows Security Event logs",
+    "Sysmon process and file activity logs",
+    "PowerShell execution and script block logs",
+    "Windows Defender and antivirus detection logs",
+    "File system creation, modification, deletion, and rename logs",
+    "File integrity monitoring and file server audit logs",
+    "Volume Shadow Copy Service (VSS) logs",
+    "Backup system and recovery logs",
+    "Authentication and remote access logs",
+    "DNS, proxy, firewall, and network flow logs",
+    "Email security and phishing detection logs",
+    "SIEM alerts and correlated security events",
+    "Threat intelligence and malware analysis reports"
+  ],
+  "completion_criteria": [
+    "Affected hosts, accounts, and potentially impacted systems identified.",
+    "Relevant suspicious processes, scripts, and execution timelines reviewed.",
+    "Potential initial access indicators investigated using available evidence.",
+    "Suspicious file activity and possible ransomware-related modifications identified.",
+    "Evidence supporting or contradicting successful file encryption assessed.",
+    "Ransom-note indicators and suspicious file extensions reviewed.",
+    "Recovery disruption attempts and their observed outcomes assessed.",
+    "Relevant antivirus detections, prevention actions, and process outcomes reviewed.",
+    "Relevant outbound network activity and potential exfiltration indicators assessed.",
+    "Potential lateral movement and additional affected systems considered.",
+    "Relevant indicators of compromise documented and linked to supporting evidence.",
+    "Confirmed observations distinguished from suspected behavior and unverified impact.",
+    "Remaining evidence gaps and investigation limitations documented."
+  ]
+}

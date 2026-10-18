@@ -10,6 +10,7 @@ from app.state.manager import (
     InvestigationNotFoundError,
     InvalidStateTransitionError,
 )
+from app.api.routes.investigations import router as investigations_router
 
 
 @asynccontextmanager
@@ -28,6 +29,7 @@ app = FastAPI(
     title=get_settings().app_name,
     lifespan=lifespan,
 )
+app.include_router(investigations_router)
 
 
 @app.exception_handler(InvestigationNotFoundError)

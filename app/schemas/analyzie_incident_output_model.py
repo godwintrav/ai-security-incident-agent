@@ -9,6 +9,7 @@ IncidentType = Literal[
     "malware",
     "suspicious_network_activity",
     "unknown",
+    "ransomware"
 ]
 
 Severity = Literal[

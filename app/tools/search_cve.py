@@ -213,3 +213,12 @@ class SearchCVE():
             vulnerabilities=parsed_vulnerabilities,
         )
 
+    def collect_tool_result_from_state(self, tool_results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        cve_results = []
+        for tool_result in tool_results:
+            tool_name = tool_result.get("name")
+            if tool_name == "search_cve":
+                    cve_results.append(tool_result)
+
+        return cve_results
+

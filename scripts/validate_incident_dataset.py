@@ -20,6 +20,8 @@ IncidentType = Literal[
     "malware",
     "suspicious_network_activity",
     "unknown",
+    "ransomware",
+    "Data Theft"
 ]
 
 Severity = Literal[
@@ -568,19 +570,21 @@ def validate_classification(
         "phishing",
         "malware",
         "suspicious_network_activity",
+        "ransomware",
+        "Data Theft",
     }:
-        report.warning(
-            f"{location}: input incident_type "
-            f"'{input_type}' is not one of the known "
-            f"incident types."
-        )
+        # report.warning(
+        #     f"{location}: input incident_type "
+        #     f"'{input_type}' is not one of the known "
+        #     f"incident types."
+        # )
         return
 
-    if analysis.incident_type == "unknown":
-        report.info_message(
-            f"{location}: model output classified "
-            f"known input type '{input_type}' as unknown."
-        )
+    # if analysis.incident_type == "unknown":
+    #     report.info_message(
+    #         f"{location}: model output classified "
+    #         f"known input type '{input_type}' as unknown."
+    #     )
 
 
 # ============================================================

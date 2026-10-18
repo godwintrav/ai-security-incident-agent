@@ -1,30 +1,31 @@
-import os
 from openai import OpenAI
 from app.prompts.prompts import LOG_ANALYSIS_SYSTEM_PROMPT
-from app.schemas.analyze_log_model import LogAnalysis
+from app.schemas.analyze_incident_input_model import Evidence
+from app.schemas.analyze_log_model import LogAnalysis, LogEvidence
 from litellm import completion
+from uuid import uuid4
+import logging
+
+from app.state.manager import InvestigationStateManager
+from app.config.settings import get_settings
+
 
 
 
 class AnalyzeLog():
     """This class is responsible for analyzing the logs sent in by the user for investigation"""
 
-    def __init__(self):
-        self.APP_ENV = os.getenv(
-                                "APP_ENV",
-                                "development"
-                            )
+    def __init__(self, state_manager: InvestigationStateManager):
+        self.APP_ENV = get_settings().app_env
         if self.APP_ENV == 'production':
-            self.API_KEY = os.getenv(
-                                    "OPENAI_API_KEY",
-                                    "development"
-                                )
+            self.API_KEY = get_settings().api_key
         else:
             self.API_KEY = "ollama"
         self.MODEL = "ollama/gpt-oss:20b"
+        self.state_manager = state_manager
         self.openai = OpenAI(base_url="http://localhost:11434/v1", api_key=self.API_KEY) if self.APP_ENV == 'development' else OpenAI(api_key=self.API_KEY)
 
-    def analyze(self, raw_logs: str, objective: str) -> LogAnalysis:
+    async def analyze(self, raw_logs: str, objective: str, investigation_id: str) -> LogAnalysis:
         user_prompt = f"""
         INVESTIGATION OBJECTIVE:
 
@@ -63,8 +64,31 @@ class AnalyzeLog():
 
         content = response.choices[0].message.content
 
-        return LogAnalysis.model_validate_json(content)
+        result = LogAnalysis.model_validate_json(content)
 
+        await self.save_evidences(log_evidences=result.evidence, investigation_id=investigation_id)
+        return result
+
+    def normalize_log_evidence_to_evidence(self, log_evidence: LogEvidence) -> Evidence:
+        evidence = Evidence(
+            id=f"ev_{uuid4().hex}",
+            type=log_evidence.key,
+            source="logs",
+            timestamp=(
+                log_evidence.timestamp.isoformat()
+                if log_evidence.timestamp
+                else None
+            ),
+            content={"value": log_evidence.value},
+        )
+        return evidence
+    
+    async def save_evidences(self, log_evidences: list[LogEvidence], investigation_id: str) -> None:
+        logging.info("Saving evidences")
+        for log_evidence in log_evidences:
+            evidence = self.normalize_log_evidence_to_evidence(log_evidence)
+            await self.state_manager.add_evidence(investigation_id, evidence)
+        logging.info("Evidences saved completely")
 
 def main():
     analyze_log = AnalyzeLog()

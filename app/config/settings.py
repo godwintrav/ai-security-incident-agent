@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     database_url: str
     chroma_db_name: str
     embedding_model: str = "BAAI/bge-base-en-v1.5"
+    autonoumous_investigation_model: str = "gpt-oss:20b"
+    api_key: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

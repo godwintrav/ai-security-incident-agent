@@ -1,3 +1,5 @@
+from typing import Any
+
 from app.rag.retriever import Retriever
 from app.schemas.search_security_knowledge_model import SecurityKnowledgeResult, SecurityKnowledgeSearchResult
 
@@ -7,7 +9,7 @@ class SearchSecurityKnowledge():
     def __init__(self):
         self.retriever = Retriever()
 
-    def search(self, query: str) -> SecurityKnowledgeSearchResult :
+    def search(self, query: str) -> SecurityKnowledgeSearchResult:
         chunks = self.retriever.retrieve_context(query)
 
         return SecurityKnowledgeSearchResult(
@@ -21,3 +23,13 @@ class SearchSecurityKnowledge():
                 for chunk in chunks
             ]
         )
+
+    def collect_tool_result_from_state(self, tool_results: list[dict[str, Any]], iteration: int) -> list[str] | None:
+        for tool_result in tool_results:
+            tool_name = tool_result.get("name")
+            tool_iteration = tool_result.get("iteration")
+            if tool_name == "search_security_knowledge":
+                if tool_iteration == iteration:
+                    return tool_result
+
+        return []

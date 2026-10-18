@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 
 from app.schemas.incident_playbook_model import IncidentPlaybook
 
@@ -25,3 +26,13 @@ class IncidentPlaybookRetriever():
             data = json.load(file)
 
         return IncidentPlaybook.model_validate(data)
+
+    def collect_tool_result_from_state(self, tool_results: list[dict[str, Any]], iteration: int) -> dict[str, Any] | None:
+        for tool_result in tool_results:
+            tool_name = tool_result.get("name")
+            tool_iteration = tool_result.get("iteration")
+            if tool_name == "get_incident_playbook":
+                if tool_iteration == iteration:
+                    return tool_result
+
+        return None
