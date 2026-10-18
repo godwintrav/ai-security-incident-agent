@@ -452,7 +452,7 @@ def build_training_config(
         save_total_limit=10,
 
         hub_strategy="every_save",
-        save_steps=100,
+        save_steps=1,
 
         # --------------------------------------------
         # Logging
