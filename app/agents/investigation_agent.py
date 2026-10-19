@@ -4,6 +4,7 @@ import json
 from pydantic import BaseModel
 
 from app.agents.tool_definitions import get_tools
+from app.config.available_tools import AVAILABLE_TOOLS
 from app.config.settings import get_settings
 import logging
 from openai import AsyncOpenAI
@@ -11,6 +12,7 @@ from app.prompts.agent_prompts import INVESTIGATION_AGENT_SYSTEM_PROMPT, build_i
 from app.schemas.analyze_incident_input_model import Evidence, Incident, IncidentAnalysisInput
 from app.schemas.analyze_log_model import LogAnalysis
 from app.schemas.analyzie_incident_output_model import IncidentAnalysis
+from app.schemas.evaluator_input_model import AvailableDataSource, DataSourceAvailability, EvaluationInput, InvestigationAttempt, IterationBudget, PreviousEvaluation
 from app.schemas.incident_playbook_model import IncidentPlaybook
 from app.schemas.search_cve_model import CVESearchResult
 from app.schemas.search_security_knowledge_model import SecurityKnowledgeSearchResult
@@ -49,12 +51,26 @@ class AutonomousInvestigationAgent():
             investigation_id
         )
 
-    async def save_tool_result(self, result: dict[str, Any], tool_name: str) -> None:
+    async def save_tool_result(
+            self,
+            tool_name: str,
+            arguments: dict,
+            result: dict | None,
+            status: str,
+            outcome: str,
+            evidence_ids: list[str] | None = None,
+            error: str | None = None,
+    ) -> None:
         await self.state_manager.add_tool_result(
             investigation_id=self.investigation_id,
             tool_name=tool_name,
             result=result,
-            iteration=self.iteration
+            iteration=self.iteration,
+            arguments=arguments,
+            status=status,
+            outcome=outcome,
+            evidence_ids=evidence_ids,
+            error=error
         )
 
     async def analyze_log(self, objective: str) -> LogAnalysis:
@@ -75,8 +91,22 @@ class AutonomousInvestigationAgent():
             )
 
             raise
-        json_result = result.model_dump(mode="json")
-        await self.save_tool_result(result=json_result, tool_name="analyze_log")
+
+        await self.save_tool_result(
+            tool_name="analyze_log",
+            arguments={"objective": objective},
+            result=result.model_dump(mode="json"),
+            status="completed",
+            outcome=(
+                "evidence_found"
+                if result.evidence
+                else "no_matching_evidence"
+            ),
+            evidence_ids=[
+                evidence.id
+                for evidence in result.evidence
+            ],
+        )
         return result
 
     async def get_incident_playbook(self, incident_type: str) -> IncidentPlaybook:
@@ -98,8 +128,18 @@ class AutonomousInvestigationAgent():
             raise
         self.incident_type = playbook.incident_type
         await self.state_manager.update_incident_type(self.investigation_id, playbook.incident_type)
-        json_result = playbook.model_dump(mode="json")
-        await self.save_tool_result(result=json_result, tool_name="get_incident_playbook")
+        await self.save_tool_result(
+                tool_name="get_incident_playbook",
+                arguments={"incident_type": incident_type},
+                result=playbook.model_dump(mode="json"),
+                status="completed",
+                outcome=(
+                    "context_found"
+                    if playbook
+                    else "no_matching_context"
+                ),
+                evidence_ids=[],
+            )
         return playbook
 
     async def search_cve(self, product: str, version: str) -> CVESearchResult:
@@ -119,8 +159,18 @@ class AutonomousInvestigationAgent():
             )
 
             raise
-        json_result = result.model_dump(mode="json")
-        await self.save_tool_result(result=json_result, tool_name="search_cve")
+        await self.save_tool_result(
+            tool_name="search_cve",
+            arguments={"product": product, "version": version},
+            result=result.model_dump(mode="json"),
+            status="completed",
+            outcome=(
+                "context_found"
+                if result
+                else "no_matching_context"
+            ),
+            evidence_ids=[],
+        )
         return result
 
     async def search_security_knowledge(self, query: str) -> SecurityKnowledgeSearchResult:
@@ -143,6 +193,18 @@ class AutonomousInvestigationAgent():
             raise
         json_result = result.model_dump(mode="json")
         await self.save_tool_result(result=json_result, tool_name="search_security_knowledge")
+        await self.save_tool_result(
+            tool_name="search_security_knowledge",
+            arguments={"query": query},
+            result=result.model_dump(mode="json"),
+            status="completed",
+            outcome=(
+                "context_found"
+                if result
+                else "no_matching_context"
+            ),
+            evidence_ids=[],
+        )
         return result
 
     async def analyze_incident_with_specialist(self) -> IncidentAnalysis:
@@ -167,8 +229,7 @@ class AutonomousInvestigationAgent():
             raise
         json_result = result.model_dump(mode="json")
         await self.state_manager.add_analysis(self.investigation_id, json_result)
-        self.iteration = self.iteration + 1
-        await self.state_manager.update_iteration(self.investigation_id, self.iteration)
+        await self.state_manager.update_iteration(self.investigation_id, self.iteration + 1)
         await self.state_manager.update_incident_type(self.investigation_id, result.incident_type)
         self.latest_analysis = result
         await self.state_manager.update_status(self.investigation_id, InvestigationStatus.INVESTIGATING)
@@ -200,6 +261,103 @@ class AutonomousInvestigationAgent():
             cve_results=self.__collect_tool_result_from_state(
                 tool_name="search_cve",
                 tool_results=state.tool_results,
+            ),
+        )
+
+    async def build_evaluation_input(self) -> EvaluationInput:
+        state = self.state_manager.get_investigation(
+            self.investigation_id
+        )
+
+        latest_analysis = state.analyses[-1]
+
+        playbook = None
+
+        for tool_result in reversed(state.tool_results):
+            if tool_result["tool_name"] == "get_incident_playbook":
+                if tool_result.get("status") == "completed":
+                    playbook = tool_result.get("result")
+                    break
+
+        tool_history = [
+            InvestigationAttempt(
+                tool_name=result["tool_name"],
+                arguments=result.get("arguments", {}),
+                status=result.get("status", "completed"),
+                outcome=result.get("outcome", "not_applicable"),
+                evidence_ids=result.get("evidence_ids", []),
+                result_summary=result.get("result"),
+                error=result.get("error"),
+            )
+            for result in state.tool_results
+        ]
+
+        available_data_sources = [
+            AvailableDataSource(
+                name="uploaded_investigation_logs",
+                availability=(
+                    DataSourceAvailability.AVAILABLE
+                    if state.logs
+                    else DataSourceAvailability.UNAVAILABLE
+                ),
+                description=(
+                    "Raw logs submitted with the investigation. "
+                    "The agent can analyze these logs using analyze_log."
+                ),
+                log_types=[],
+                limitations=[
+                    "Only the submitted logs are accessible",
+                    "No live endpoint, SIEM, or backup-system access",
+                ],
+            )
+        ]
+
+        previous_evaluations = [
+            PreviousEvaluation(
+                decision=evaluation["decision"],
+                reasoning_summary=evaluation["reasoning_summary"],
+                requested_tasks=[
+                    task["investigation_question"]
+                    for task in evaluation.get(
+                        "investigation_tasks", []
+                    )
+                ],
+                unresolved_questions=[
+                    gap["question"]
+                    for gap in evaluation.get(
+                        "unresolved_gaps", []
+                    )
+                ],
+            )
+            for evaluation in getattr(state, "evaluations", [])
+        ]
+
+        max_specialist_calls = 3
+        specialist_calls_used = len(state.analyses)
+
+        return EvaluationInput(
+            investigation_id=str(state.id),
+            description=state.description,
+            incident_type=latest_analysis["incident_type"],
+            evidence=[
+                e.model_dump(mode="json")
+                if hasattr(e, "model_dump")
+                else e
+                for e in state.evidence
+            ],
+            latest_analysis=latest_analysis,
+            playbook=playbook,
+            tool_history=tool_history,
+            available_tools=AVAILABLE_TOOLS,
+            available_data_sources=available_data_sources,
+            previous_evaluations=previous_evaluations,
+            iteration_budget=IterationBudget(
+                specialist_calls_used=specialist_calls_used,
+                specialist_calls_remaining=max(
+                    0,
+                    max_specialist_calls - specialist_calls_used,
+                ),
+                max_new_tasks=3,
             ),
         )
 

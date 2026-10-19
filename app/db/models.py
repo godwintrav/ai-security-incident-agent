@@ -62,6 +62,12 @@ class InvestigationDB(Base):
         nullable=False,
     )
 
+    evaluations: Mapped[list[dict[str, Any]]] = mapped_column(
+        JSONB,
+        default=list,
+        nullable=False,
+    )
+
     iteration: Mapped[int] = mapped_column(
         Integer,
         default=0,

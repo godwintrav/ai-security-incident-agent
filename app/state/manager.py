@@ -312,7 +312,12 @@ class InvestigationStateManager:
         investigation_id: UUID,
         tool_name: str,
         result: dict[str, Any] | list[str] | list[dict[str, Any]],
-        iteration: int = 1
+        arguments: dict,
+        status: str,
+        outcome: str,
+        evidence_ids: list[str] | None = None,
+        error: str | None = None,
+        iteration: int = 1,
     ) -> None:
         try:
             investigation = await self._get_locked(investigation_id)
@@ -322,7 +327,12 @@ class InvestigationStateManager:
                 {
                     "tool": tool_name,
                     "result": jsonable_encoder(result),
-                    "iteration": iteration
+                    "iteration": iteration,
+                    arguments: arguments,
+                    status: status,
+                    outcome: outcome,
+                    evidence_ids: evidence_ids,
+                    error: error,
                 },
             ]
 
@@ -355,6 +365,31 @@ class InvestigationStateManager:
                 investigation_id,
                 "analysis_completed",
                 "Incident analysis completed",
+            )
+
+            await self.session.commit()
+        except Exception:
+            await self.session.rollback()
+            raise
+
+
+    async def add_evaluation(
+        self,
+        investigation_id: UUID,
+        evaluation: dict[str, Any],
+    ) -> None:
+        try:
+            investigation = await self._get_locked(investigation_id)
+
+            investigation.evaluations = [
+                *investigation.evaluations,
+                jsonable_encoder(evaluation),
+            ]
+
+            await self._record_event(
+                investigation_id,
+                "evaluation_completed",
+                "Incident evaluation completed",
             )
 
             await self.session.commit()

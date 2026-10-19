@@ -1,7 +1,3 @@
-
-# app/agents/tool_definitions.py
-
-
 ANALYZE_LOG_FUNCTION = {
     "name": "analyze_log",
     "description": (
